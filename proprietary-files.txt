@@ -525,13 +525,16 @@ vendor/lib64/vendor.display.postproc@1.0.so
 odm/lib64/hw/displayfeature.default.so
 odm/lib64/libMiDispDevManager.so
 odm/lib64/libadaptivehdr.so
+odm/lib64/libbarrage.so
 odm/lib64/libcolortempmode.so
 odm/lib64/libdisplaycount.so
 odm/lib64/libdisplaylog.so
 odm/lib64/libdither.so
 odm/lib64/libeyecare.so
+odm/lib64/libfcmintf.so
 odm/lib64/libflatmode.so
 odm/lib64/libfpsmonitor.so
+odm/lib64/libframecapturemanager.so
 odm/lib64/libhistprocess.so
 odm/lib64/libmi-stc-HW-modulate.so
 odm/lib64/libmiBrightness.so
@@ -546,6 +549,7 @@ odm/lib64/libsdr2hdr.so
 odm/lib64/libsre.so
 odm/lib64/libtruetone.so
 odm/lib64/libvideomode.so
+odm/lib64/vendor.xiaomi.hardware.framecapturemanager-V1-ndk.so
 vendor/bin/displayfeature
 vendor/bin/hw/vendor.xiaomi.hardware.displayfeature_aidl-service
 vendor/etc/init/vendor.xiaomi.hardware.displayfeature_aidl-service.rc
