@@ -319,6 +319,8 @@ PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
     hardware/google/interfaces \
     hardware/google/pixel \
+    hardware/nxp/keymint/generic \
+    hardware/nxp/weaver/generic \
     hardware/xiaomi \
     vendor/qcom/opensource/usb/etc
 
