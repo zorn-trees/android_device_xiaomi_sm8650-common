@@ -85,6 +85,16 @@ class ZornUdfpsHandler : public UdfpsHandler {
         mDevice = device;
         disp_fd_ = android::base::unique_fd(open(DISP_FEATURE_PATH, O_RDWR));
         touch_fd_ = android::base::unique_fd(open(TOUCH_DEV_PATH, O_RDWR));
+        if (touch_fd_.get() < 0) {
+            LOG(ERROR) << "failed to open " << TOUCH_DEV_PATH;
+        } else if (ioctl(touch_fd_.get(), XIAOMI_TOUCH_IOC_SELECT_TOUCH_ID,
+                         XIAOMI_TOUCH_ID_PRIMARY) < 0) {
+            LOG(ERROR) << "failed to select touch id";
+        } else {
+            // The touch IC tracks the finger and updates fod_press_status by
+            // itself, it only needs FOD detection to be enabled.
+            setTouchMode(XIAOMI_TOUCH_MODE_FOD_ENABLE, 1);
+        }
 
         // Thread to listen for fod ui changes
         std::thread([this]() {
@@ -150,13 +160,6 @@ class ZornUdfpsHandler : public UdfpsHandler {
         mDevice->extCmd(mDevice, COMMAND_FOD_PRESS_Y, y);
         mDevice->extCmd(mDevice, COMMAND_FOD_PRESS_STATUS, PARAM_FOD_PRESSED);
 
-        // Update fod_finger_state node in case hwmodule polls it
-        struct touch_mode_request touchRequest = {
-                .mode = TOUCH_MODE_FOD_FINGER_STATE,
-                .value = 1,
-        };
-        ioctl(touch_fd_.get(), TOUCH_IOC_SET_CUR_VALUE, &touchRequest);
-
         // Request HBM
         struct disp_local_hbm_req displayLhbmRequest = {
                 .base = displayBasePrimary,
@@ -178,13 +181,6 @@ class ZornUdfpsHandler : public UdfpsHandler {
                 .local_hbm_value = LHBM_TARGET_BRIGHTNESS_OFF_FINGER_UP,
         };
         ioctl(disp_fd_.get(), MI_DISP_IOCTL_SET_LOCAL_HBM, &displayLhbmRequest);
-
-        // Update fod_finger_state node in case hwmodule polls it
-        struct touch_mode_request touchRequest = {
-                .mode = TOUCH_MODE_FOD_FINGER_STATE,
-                .value = 0,
-        };
-        ioctl(touch_fd_.get(), TOUCH_IOC_SET_CUR_VALUE, &touchRequest);
     }
 
     void onAcquired(int32_t result, int32_t vendorCode) {
@@ -219,6 +215,19 @@ class ZornUdfpsHandler : public UdfpsHandler {
     void onAuthenticationFailed() { onFingerUp(); }
 
   private:
+    void setTouchMode(int mode, int value) {
+        struct xiaomi_touch_common_data data = {
+                .touch_id = XIAOMI_TOUCH_ID_PRIMARY,
+                .cmd = XIAOMI_TOUCH_SET_CUR_VALUE,
+                .mode = static_cast<__u16>(mode),
+                .data_len = 1,
+        };
+        data.data_buf[0] = value;
+        if (ioctl(touch_fd_.get(), XIAOMI_TOUCH_IOC_COMMON_DATA, &data) < 0) {
+            LOG(ERROR) << "failed to set touch mode " << mode << " to " << value;
+        }
+    }
+
     fingerprint_device_t* mDevice;
     android::base::unique_fd disp_fd_;
     android::base::unique_fd touch_fd_;
