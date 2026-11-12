@@ -739,8 +739,6 @@ vendor/lib64/libEvrcSwCodec.so
 vendor/lib64/libFlacSwDec.so
 vendor/lib64/libQcelp13SwCodec.so
 vendor/lib64/libdsd2pcm.so
-vendor/lib64/libmilut.so
-vendor/lib64/libmisr.so
 vendor/lib64/libqc2audio_base.so
 vendor/lib64/libqc2audio_basecodec.so
 vendor/lib64/libqc2audio_core.so
@@ -758,9 +756,7 @@ vendor/lib64/libqcodec2_filterbase.so
 vendor/lib64/libqcodec2_hooks.so
 vendor/lib64/libqcodec2_imgtxrfilter.so
 vendor/lib64/libqcodec2_mockfilter.so
-vendor/lib64/libqcodec2_mocklutfilter.so
 vendor/lib64/libqcodec2_platform.so
-vendor/lib64/libqcodec2_srfilter.so
 vendor/lib64/libqcodec2_streaminteg_filter.so
 vendor/lib64/libqcodec2_utils.so
 vendor/lib64/libqcodec2_v4l2codec.so
@@ -1381,12 +1377,10 @@ vendor/framework/androidx.camera.extensions.impl.jar
 vendor/lib64/libFace3DTA.so
 vendor/lib64/libFace3D_hlos.so
 vendor/lib64/libQ6MSFR_manager_stub.so
-vendor/lib64/libSNPESample.so
 vendor/lib64/libcameraopt.so
 vendor/lib64/libface3d_dev.so
 vendor/lib64/libjpegdecoder.so:vendor/lib64/libjpegdecoder_prebuilt.so;FIX_SONAME
 vendor/lib64/libjpegencoder.so:vendor/lib64/libjpegencoder_prebuilt.so;FIX_SONAME
-vendor/lib64/libmialgo.so
 vendor/lib64/libos.so
 vendor/lib64/libqshcamera.so
 vendor/lib64/libsynx.so
@@ -1427,7 +1421,6 @@ odm/firmware/CAMERA_ICP_170.elf
 system_ext/etc/permissions/com.qti.qcc.vendor_qcc.xml
 vendor/lib64/libhalide_hexagon_host.so
 vendor/lib64/libmidebuggerdimpl_vendor.so;DISABLE_CHECKELF
-vendor/lib64/libmips.so
 vendor/lib64/libqvr_cam_cdsp_driver_stub.so
 vendor/lib64/libqvr_cdsp_driver_stub.so
 vendor/lib64/libqvr_eyetracking_plugin.so
