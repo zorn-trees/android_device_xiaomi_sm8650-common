@@ -30,15 +30,21 @@ class NonUiSensorCallback : public IEventQueueCallback {
         touch_fd_ = android::base::unique_fd(open(kTouchDevice.c_str(), O_RDWR));
         if (touch_fd_.get() == -1) {
             LOG(ERROR) << "failed to open " << kTouchDevice;
+        } else if (ioctl(touch_fd_.get(), XIAOMI_TOUCH_IOC_SELECT_TOUCH_ID,
+                         XIAOMI_TOUCH_ID_PRIMARY) < 0) {
+            LOG(ERROR) << "failed to select touch id";
         }
     }
 
     Return<void> onEvent(const Event& e) {
-        struct touch_mode_request request = {
-            .mode = TOUCH_MODE_NONUI_MODE,
-            .value = static_cast<int>(e.u.scalar),
+        struct xiaomi_touch_common_data request = {
+                .touch_id = XIAOMI_TOUCH_ID_PRIMARY,
+                .cmd = XIAOMI_TOUCH_SET_CUR_VALUE,
+                .mode = XIAOMI_TOUCH_MODE_NONUI,
+                .data_len = 1,
         };
-        ioctl(touch_fd_.get(), TOUCH_IOC_SET_CUR_VALUE, &request);
+        request.data_buf[0] = static_cast<int>(e.u.scalar);
+        ioctl(touch_fd_.get(), XIAOMI_TOUCH_IOC_COMMON_DATA, &request);
 
         return Void();
     }
