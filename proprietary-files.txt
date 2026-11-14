@@ -1280,6 +1280,14 @@ vendor/etc/thermal-engine.conf
 vendor/etc/thermal-map.conf
 vendor/etc/thermald-devices.conf
 
+# TouchFeature
+odm/bin/hw/vendor.xiaomi.hw.touchfeature-service
+odm/etc/init.panel_info.sh
+odm/etc/init/vendor.xiaomi.hw.touchfeature-service.rc
+odm/etc/vintf/manifest/vendor.xiaomi.hw.touchfeature-service.xml
+odm/lib64/libtensorflowlite_touch_c.so
+vendor/lib64/vendor.xiaomi.hw.touchfeature-V1-ndk_platform.so
+
 # Time services
 vendor/app/TimeService/TimeService.apk
 vendor/bin/time_daemon

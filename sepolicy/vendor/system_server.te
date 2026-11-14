@@ -1,1 +1,2 @@
 binder_call(system_server, vendor_hal_displayfeature_xiaomi_default)
+binder_call(system_server, hal_touchfeature_xiaomi_default)

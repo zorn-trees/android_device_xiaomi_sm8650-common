@@ -1,0 +1,13 @@
+type vendor_touch_init_shell, domain;
+type vendor_touch_init_shell_exec, exec_type, file_type, vendor_file_type;
+
+init_daemon_domain(vendor_touch_init_shell)
+
+allow vendor_touch_init_shell vendor_shell_exec:file entrypoint;
+allow vendor_touch_init_shell vendor_toolbox_exec:file rx_file_perms;
+
+r_dir_file(vendor_touch_init_shell, sysfs)
+r_dir_file(vendor_touch_init_shell, sysfs_touch_hostprocess)
+
+set_prop(vendor_touch_init_shell, vendor_fp_info_prop)
+set_prop(vendor_touch_init_shell, vendor_panel_info_prop)
