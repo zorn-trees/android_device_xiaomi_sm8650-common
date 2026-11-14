@@ -203,7 +203,7 @@ ro.vendor.extension_library=libqti-perfd-client.so
 
 # QCOM
 ro.soc.manufacturer=QTI
-ro.soc.model=SM8635
+ro.soc.model=SM8650
 
 # QCOMsysD
 persist.vendor.qcomsysd.enabled=1
