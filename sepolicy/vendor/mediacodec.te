@@ -1,2 +1,3 @@
 allow mediacodec vendor_mistcdisplay_service:service_manager find;
 get_prop(mediacodec, vendor_displayfeature_prop)
+get_prop(mediacodec, vendor_display_prop)
