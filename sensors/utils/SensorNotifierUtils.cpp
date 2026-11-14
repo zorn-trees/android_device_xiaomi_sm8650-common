@@ -10,6 +10,10 @@
 
 #include <android-base/logging.h>
 
+#include <cstdlib>
+#include <cstring>
+#include <unistd.h>
+
 bool readBool(int fd) {
     char c;
     int rc;
@@ -30,28 +34,27 @@ bool readBool(int fd) {
 }
 
 disp_event_resp* parseDispEvent(int fd) {
-    disp_event header;
-    ssize_t headerSize = read(fd, &header, sizeof(header));
-    if (headerSize < sizeof(header)) {
-        LOG(ERROR) << "unexpected display event header size: " << headerSize;
+    // mi_disp only hands out whole events: a read() buffer smaller than the
+    // pending event returns 0 and leaves it queued, so read it in one go.
+    char buf[1024];
+    ssize_t size = read(fd, buf, sizeof(buf));
+    if (size < static_cast<ssize_t>(sizeof(disp_event))) {
+        LOG(ERROR) << "unexpected display event size: " << size;
+        return nullptr;
+    }
+
+    disp_event* header = reinterpret_cast<disp_event*>(buf);
+    if (header->length < sizeof(disp_event) || static_cast<ssize_t>(header->length) > size) {
+        LOG(ERROR) << "invalid display event length: " << header->length;
         return nullptr;
     }
 
     struct disp_event_resp* response =
-            reinterpret_cast<struct disp_event_resp*>(malloc(header.length));
-    response->base = header;
-
-    int dataLength = response->base.length - sizeof(response->base);
-    if (dataLength < 0) {
-        LOG(ERROR) << "invalid data length: " << response->base.length;
+            reinterpret_cast<struct disp_event_resp*>(malloc(header->length));
+    if (response == nullptr) {
         return nullptr;
     }
-
-    ssize_t dataSize = read(fd, &response->data, dataLength);
-    if (dataSize < dataLength) {
-        LOG(ERROR) << "unexpected display event data size: " << dataSize;
-        return nullptr;
-    }
+    memcpy(response, buf, header->length);
 
     return response;
 }

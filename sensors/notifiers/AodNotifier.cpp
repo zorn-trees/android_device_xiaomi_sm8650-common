@@ -98,13 +98,15 @@ void AodNotifier::notify() {
 
         if (response->base.type != MI_DISP_EVENT_POWER) {
             LOG(ERROR) << "unexpected display event: " << response->base.type;
+            free(response);
             continue;
         }
 
         int value = response->data[0];
+        free(response);
         LOG(VERBOSE) << "received data: " << std::bitset<8>(value);
 
-        switch (response->data[0]) {
+        switch (value) {
             case MI_DISP_POWER_LP1:
                 FALLTHROUGH_INTENDED;
             case MI_DISP_POWER_LP2:
